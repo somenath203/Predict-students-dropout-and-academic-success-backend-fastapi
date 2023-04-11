@@ -20,13 +20,15 @@ app.add_middleware(
 )
 
 
-# studentSuccessPredictorData = pd.read_csv('data.csv')
+studentSuccessPredictorData = pd.read_csv('data.csv')
+
+print(studentSuccessPredictorData.head())
 
 model = pickle.load(open('predict_student_dropout_academic_success.pkl', 'rb'))
 
 
 class StudentInfoModel(BaseModel):
-    course: int
+    course_name: int
     daytime_evening_attendance: int
     prev_qualification: int
     prev_qualification_grade: int
@@ -51,7 +53,7 @@ class StudentInfoModel(BaseModel):
 
 
 
-@app.post('/')
+@app.get('/')
 async def welcome_msg():
     return {
         'success' : True,
@@ -61,25 +63,36 @@ async def welcome_msg():
     
 @app.post('/predict')
 async def predict(studentInfo: StudentInfoModel):
-    course: studentInfo.course
-    daytimeEveningAttendance: studentInfo.daytime_evening_attendance
-    previousQualification: studentInfo.prev_qualification
-    previousQualificationGrade: studentInfo.prev_qualification_grade
-    admissionGrade: studentInfo.admission_grade
-    educationSpecialNeeds: studentInfo.educational_special_needs
-    tutionFeesUptoDate: studentInfo.tution_fees_upto_date
-    gender: studentInfo.gender
-    scholarshipHolder: studentInfo.scholarship_holder
-    ageOfEnrollement: studentInfo.age_of_enrollement
-    cirricularUnitFirstSemCredited: studentInfo.cirricular_units_first_unit_sem_credited
-    cirricularUnitFirstSemEnrolled: studentInfo.cirricular_units_first_unit_sem_enrolled
-    cirricularUnitFirstSemEvaluation: studentInfo.cirricular_units_first_unit_sem_evaluations
-    cirricularUnitFirstSemApproved: studentInfo.cirricular_units_first_unit_sem_approved
-    cirricularUnitFirstSemGrade: studentInfo.cirricular_units_first_unit_sem_grade
-    cirricularUnitFirstSemWithoutEvalutaion: studentInfo.cirricular_units_first_unit_sem_without_evaluations
-    cirricularUnitSecondSemCredited: studentInfo.cirricular_units_second_unit_sem_credited
-    cirricularUnitSecondSemEnrolled: studentInfo.cirricular_units_second_unit_sem_enrolled
-    cirricularUnitSecondSemEvaluation: studentInfo.cirricular_units_second_unit_sem_evaluations
-    cirricularUnitSecondSemApproved: studentInfo.cirricular_units_second_unit_sem_approved
-    cirricularUnitSecondSemGrade: studentInfo.cirricular_units_second_unit_sem_grade
-    cirricularUnitSecondSemWithoutEvaluation: studentInfo.cirricular_units_second_unit_sem_without_evaluations
+    course= studentInfo.course_name
+    daytimeEveningAttendance = studentInfo.daytime_evening_attendance
+    previousQualification = studentInfo.prev_qualification
+    previousQualificationGrade = studentInfo.prev_qualification_grade
+    admissionGrade = studentInfo.admission_grade
+    educationSpecialNeeds = studentInfo.educational_special_needs
+    tutionFeesUptoDate = studentInfo.tution_fees_upto_date
+    gender = studentInfo.gender
+    scholarshipHolder = studentInfo.scholarship_holder
+    ageOfEnrollement = studentInfo.age_of_enrollement
+    cirricularUnitFirstSemCredited = studentInfo.cirricular_units_first_unit_sem_credited
+    cirricularUnitFirstSemEnrolled = studentInfo.cirricular_units_first_unit_sem_enrolled
+    cirricularUnitFirstSemEvaluation = studentInfo.cirricular_units_first_unit_sem_evaluations
+    cirricularUnitFirstSemApproved = studentInfo.cirricular_units_first_unit_sem_approved
+    cirricularUnitFirstSemGrade = studentInfo.cirricular_units_first_unit_sem_grade
+    cirricularUnitFirstSemWithoutEvalutaion = studentInfo.cirricular_units_first_unit_sem_without_evaluations
+    cirricularUnitSecondSemCredited = studentInfo.cirricular_units_second_unit_sem_credited
+    cirricularUnitSecondSemEnrolled = studentInfo.cirricular_units_second_unit_sem_enrolled
+    cirricularUnitSecondSemEvaluation = studentInfo.cirricular_units_second_unit_sem_evaluations
+    cirricularUnitSecondSemApproved = studentInfo.cirricular_units_second_unit_sem_approved
+    cirricularUnitSecondSemGrade = studentInfo.cirricular_units_second_unit_sem_grade
+    cirricularUnitSecondSemWithoutEvaluation = studentInfo.cirricular_units_second_unit_sem_without_evaluations 
+
+    dataFrameOfTheUserInputData = pd.DataFrame([[course, daytimeEveningAttendance, previousQualification, previousQualificationGrade, admissionGrade, educationSpecialNeeds, tutionFeesUptoDate, gender, scholarshipHolder, ageOfEnrollement, cirricularUnitFirstSemCredited, cirricularUnitFirstSemEnrolled, cirricularUnitFirstSemEvaluation, cirricularUnitFirstSemApproved, cirricularUnitFirstSemGrade, cirricularUnitFirstSemWithoutEvalutaion, cirricularUnitSecondSemCredited, cirricularUnitSecondSemEnrolled, cirricularUnitSecondSemEvaluation, cirricularUnitSecondSemApproved, cirricularUnitSecondSemGrade, cirricularUnitSecondSemWithoutEvaluation]], 
+                                               columns=['Course', 'Daytime/evening attendance\t', 'Previous qualification', 'Previous qualification(grade)', 'Admission grade', 'Educational special needs', 'Tuition fees up to date', 'Gender', 'Scholarship holder', 'Age of enrollment', 'Curricular units 1st sem (credited)', 'Curricular units 1st sem (enrolled)', 'Curricular units 1st sem (evaluations)', 'Curricular units 1st sem (approved)', 'Curricular units 1st sem (grade)', 'Curricular units 1st sem (without evaluations)', 'Curricular units 2nd sem (credited)', 'Curricular units 2nd sem (enrolled)', 'Curricular units 2nd sem (evaluations)', 'Curricular units 2nd sem (approved)', 'Curricular units 2nd sem (grade)', 'Curricular units 2nd sem (without evaluations)'])
+    
+    prediction = model.predict(dataFrameOfTheUserInputData)
+
+    print(prediction)
+
+    return {
+        'success': 'ok'
+    }
