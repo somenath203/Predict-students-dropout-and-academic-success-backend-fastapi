@@ -20,9 +20,6 @@ app.add_middleware(
 )
 
 
-studentSuccessPredictorData = pd.read_csv('data.csv')
-
-print(studentSuccessPredictorData.head())
 
 model = pickle.load(open('predict_student_dropout_academic_success.pkl', 'rb'))
 
@@ -87,12 +84,13 @@ async def predict(studentInfo: StudentInfoModel):
     cirricularUnitSecondSemWithoutEvaluation = studentInfo.cirricular_units_second_unit_sem_without_evaluations 
 
     dataFrameOfTheUserInputData = pd.DataFrame([[course, daytimeEveningAttendance, previousQualification, previousQualificationGrade, admissionGrade, educationSpecialNeeds, tutionFeesUptoDate, gender, scholarshipHolder, ageOfEnrollement, cirricularUnitFirstSemCredited, cirricularUnitFirstSemEnrolled, cirricularUnitFirstSemEvaluation, cirricularUnitFirstSemApproved, cirricularUnitFirstSemGrade, cirricularUnitFirstSemWithoutEvalutaion, cirricularUnitSecondSemCredited, cirricularUnitSecondSemEnrolled, cirricularUnitSecondSemEvaluation, cirricularUnitSecondSemApproved, cirricularUnitSecondSemGrade, cirricularUnitSecondSemWithoutEvaluation]], 
-                                               columns=['Course', 'Daytime/evening attendance\t', 'Previous qualification', 'Previous qualification(grade)', 'Admission grade', 'Educational special needs', 'Tuition fees up to date', 'Gender', 'Scholarship holder', 'Age of enrollment', 'Curricular units 1st sem (credited)', 'Curricular units 1st sem (enrolled)', 'Curricular units 1st sem (evaluations)', 'Curricular units 1st sem (approved)', 'Curricular units 1st sem (grade)', 'Curricular units 1st sem (without evaluations)', 'Curricular units 2nd sem (credited)', 'Curricular units 2nd sem (enrolled)', 'Curricular units 2nd sem (evaluations)', 'Curricular units 2nd sem (approved)', 'Curricular units 2nd sem (grade)', 'Curricular units 2nd sem (without evaluations)'])
+                                               columns=['Course', 'Daytime/evening attendance\t', 'Previous qualification', 'Previous qualification (grade)', 'Admission grade', 'Educational special needs', 'Tuition fees up to date', 'Gender', 'Scholarship holder', 'Age at enrollment', 'Curricular units 1st sem (credited)', 'Curricular units 1st sem (enrolled)', 'Curricular units 1st sem (evaluations)', 'Curricular units 1st sem (approved)', 'Curricular units 1st sem (grade)', 'Curricular units 1st sem (without evaluations)', 'Curricular units 2nd sem (credited)', 'Curricular units 2nd sem (enrolled)', 'Curricular units 2nd sem (evaluations)', 'Curricular units 2nd sem (approved)', 'Curricular units 2nd sem (grade)', 'Curricular units 2nd sem (without evaluations)'])
     
     prediction = model.predict(dataFrameOfTheUserInputData)
 
-    print(prediction)
 
     return {
-        'success': 'ok'
+        'success': True,
+        'message': 'Your future academic performance has been predicted successfully',
+        'data': str(prediction[0])
     }
