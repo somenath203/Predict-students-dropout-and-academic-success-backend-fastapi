@@ -1,5 +1,0 @@
-3 - preceptron
-4 - gaussian naive bayes
-2 - decision tree
-5 - random forest
-1- logistic regression
