@@ -52,7 +52,7 @@ class StudentInfoModel(BaseModel):
 async def welcome_msg():
     return {
         'success': True,
-        'message': 'The server of "predict student dropout and academic success" is running successfully'
+        'message': 'The fastapi server of "predict student dropout and academic success" is running successfully'
     }
 
 
